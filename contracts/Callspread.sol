@@ -42,7 +42,7 @@ contract Callspread is ERC721, ChainlinkClient {
      * Address: 0x7d7356bF6Ee5CDeC22B216581E48eCC700D0497A
      */
     constructor() 
-    ERC721("Call spread","CSCEUR") {
+    ERC721("Call spread", "CSCEUR") {
         priceFeed = AggregatorV3Interface(
             0x7d7356bF6Ee5CDeC22B216581E48eCC700D0497A
         );
@@ -99,7 +99,7 @@ contract Callspread is ERC721, ChainlinkClient {
                 // transfer fees from buyer to seller
                 IERC20(ceur).transferFrom(o.buyer_address, o.seller_address, buyer_premium);
 
-                // get EUR/USD value by calling expireOption()
+                // get EUR/USD value by calling latestRoundData()
                 (
                 /* uint80 roundID */,
                 int price,
@@ -107,6 +107,7 @@ contract Callspread is ERC721, ChainlinkClient {
                 /*uint timeStamp*/,
                 /*uint80 answeredInRound*/
                 ) = priceFeed.latestRoundData();
+                
                 uint payoff = 0;
 
                 // converting input values to the format of price (* 1000000)
