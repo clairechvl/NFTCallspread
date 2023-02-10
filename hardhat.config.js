@@ -1,7 +1,6 @@
 require("@nomiclabs/hardhat-waffle");
+require("dotenv").config();
 
-// This is a sample Hardhat task. To learn how to create your own go to
-// https://hardhat.org/guides/create-task.html
 task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   const accounts = await hre.ethers.getSigners();
 
@@ -10,12 +9,34 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   }
 });
 
-// You need to export an object to set up your config
-// Go to https://hardhat.org/config/ to learn more
+task("deploy", "Deploy the smart contracts", async(taskArgs, hre) => {
 
-/**
- * @type import('hardhat/config').HardhatUserConfig
- */
+  const Callspread = await hre.ethers.getContractFactory("Callspread");
+  const callspread = await Callspread.deploy();
+
+  await callspread.deployed();
+
+  await hre.run("verify:verify", {
+    address: callspread.address,
+    constructorArguments: [
+      "Callspread",
+      "CSCEUR"
+    ]
+  })
+
+})
+
 module.exports = {
   solidity: "0.8.4",
+  networks: {
+    mumbai: {
+      url: "https://matic-testnet-archive-rpc.bwarelabs.com/",
+      accounts: [
+        process.env.PRIVATE_KEY,
+      ]
+    }
+  },
+  etherscan: {
+    apiKey: process.env.POLYGON_API_KEY,
+  }
 };

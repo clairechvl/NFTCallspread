@@ -6,3 +6,8 @@ node_modules
 #Hardhat files
 cache
 artifacts
+/.idea/.gitignore
+/test/callspread-test.js
+/.idea/modules.xml
+/.idea/Projet.iml
+/.idea/vcs.xml
